@@ -1,0 +1,25 @@
+.container {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  margin: 0;
+  padding: 0;
+}
+
+.borders {
+  border: 2px solid black;
+}
+
+.top-bottom {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+.left-right {
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+}
