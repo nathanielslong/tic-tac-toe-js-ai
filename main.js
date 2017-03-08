@@ -6,12 +6,12 @@
 var current_letter = "X"
 
 $('.clickable').click( function() {
-  if ($(this).html == "") {
-    $(this).html(current_letter);
+  if ($(this).html() == "") {
+    $(this).html(current_letter)
     current_letter = current_letter == "X" ? "O" : "X";
     $('#messages').html("");
   } else {
-    $('#messages').html("Click a blank space!");
+    $('#messages').html("Please click a blank space!");
   }
 })
 
