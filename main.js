@@ -1,3 +1,5 @@
+// rewrite as array
+
 var current_letter = "X"
 
 $('.clickable').on('click', clickEvent)
@@ -90,5 +92,74 @@ function youWin(letter) {
   $('.display-none').removeClass('display-none');
   for (i = 0; i < 9; i++) {
     $('#sq' + (i + 1)).removeClass('clickable').off('click');
+  }
+}
+
+// AI INFO
+
+var State = function(old) {
+  this.turn = '';
+  this.oMovesCount = 0;
+  this.result = 'still running';
+  this.board = [];
+
+  if (typeof old !== "undefined") {
+    var len = old.board.length;
+    this.board = new Array[len];
+    for (var itr = 0; itr < len; itr++) {
+      this.board[itr] = old.board[itr];
+    }
+
+    this.oMovesCount = old.oMovesCount;
+    this.result = old.result;
+    this.turn = old.turn;
+  }
+
+  this.advanceTurn = function() {
+    this.turn = this.turn === "X" ? "O" : "X";
+  }
+
+  this.emptyCells = function() {
+    var indxs = [];
+    for (var itr = 0; itr < 9; itr++) {
+      if (this.board[itr] === "E") {
+        indxs.push(itr);
+      }
+    }
+    return indxs;
+  }
+
+  this.isTerminal = function() {
+    var B = this.board;
+
+    // rows
+    for (var i = 0; i <= 6; i += 3) {
+      if (B[i] !== "E" && B[i] == B[i + 1] && B[i] == B[i + 2]) {
+        this.result = B[i] + "-won!";
+        return true;
+      }
+    }
+
+    // columns
+    for (var i = 0; i <= 2; i++) {
+      if (B[i] !== "E" && B[i] == B[i + 3] && B[i] == B[i + 6])
+        this.result = B[i] + "-won!";
+        return true;
+    }
+
+    // diagonals
+    for (var i = 0; var j = 4; i += 2; j -= 2) {
+      if (B[i] !== "E" && B[i] == B[i + j] && B[i] == B[i + 2 * j])
+        this.result = B[i] + "-won!";
+        return true;
+    }
+
+    var available = this.emptyCells();
+    if (available.length == 0) {
+      this.result = "draw";
+      return true;
+    } else {
+      return false;
+    }
   }
 }
