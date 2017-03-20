@@ -1,4 +1,4 @@
-// rewrite as array
+// game interaction, will rework with state function and such
 
 var current_letter = "X"
 
@@ -6,14 +6,14 @@ $('.clickable').on('click', clickEvent)
 
 function checkIfAllOccupied(id1, id2, id3, id4, id5, id6, id7, id8, id9) {
   return $(id1).html() !== "" &&
-         $(id2).html() !== "" &&
-         $(id3).html() !== "" &&
-         $(id4).html() !== "" &&
-         $(id5).html() !== "" &&
-         $(id6).html() !== "" &&
-         $(id7).html() !== "" &&
-         $(id8).html() !== "" &&
-         $(id9).html() !== "";
+    $(id2).html() !== "" &&
+    $(id3).html() !== "" &&
+    $(id4).html() !== "" &&
+    $(id5).html() !== "" &&
+    $(id6).html() !== "" &&
+    $(id7).html() !== "" &&
+    $(id8).html() !== "" &&
+    $(id9).html() !== "";
 }
 
 function checkIfEmpty(id1, id2, id3) {
@@ -28,40 +28,40 @@ function checkIfWon() {
   switch(true) {
     case checkIfEqual(sq1, sq2, sq3) && checkIfEmpty(sq1, sq2, sq3):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfEqual(sq1, sq4, sq7) && checkIfEmpty(sq1, sq4, sq7):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfEqual(sq1, sq5, sq9) && checkIfEmpty(sq1, sq5, sq9):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfEqual(sq2, sq5, sq8) && checkIfEmpty(sq2, sq5, sq8):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfEqual(sq3, sq6, sq9) && checkIfEmpty(sq3, sq6, sq9):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfEqual(sq3, sq5, sq7) && checkIfEmpty(sq3, sq5, sq7):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfEqual(sq4, sq5, sq6) && checkIfEmpty(sq4, sq5, sq6):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfEqual(sq7, sq8, sq9) && checkIfEmpty(sq7, sq8, sq9):
       youWin(current_letter);
-      break;
+    break;
 
     case checkIfAllOccupied(sq1, sq2, sq3, sq4, sq5, sq6, sq7, sq8, sq9):
       $('#messages').html("It's a draw! Play again?");
-      $('.display-none').removeClass('display-none');
-      break;
+    $('.display-none').removeClass('display-none');
+    break;
 
     default:
       break;
@@ -95,7 +95,7 @@ function youWin(letter) {
   }
 }
 
-// AI INFO
+// State function
 
 var State = function(old) {
   this.turn = '';
@@ -144,14 +144,14 @@ var State = function(old) {
     for (var i = 0; i <= 2; i++) {
       if (B[i] !== "E" && B[i] == B[i + 3] && B[i] == B[i + 6])
         this.result = B[i] + "-won!";
-        return true;
+      return true;
     }
 
     // diagonals
     for (var i = 0; var j = 4; i += 2; j -= 2) {
       if (B[i] !== "E" && B[i] == B[i + j] && B[i] == B[i + 2 * j])
         this.result = B[i] + "-won!";
-        return true;
+      return true;
     }
 
     var available = this.emptyCells();
@@ -162,4 +162,103 @@ var State = function(old) {
       return false;
     }
   }
+}
+
+// AI
+
+var AI = function(level) {
+  var levelOfIntelligence = level;
+
+  var game = {};
+
+  function minimaxValue(state) {
+    return true;
+  }
+
+  function takeABlindMove(turn) {
+    return true;
+  }
+
+  function takeANoviceMove(turn) {
+    return true;
+  }
+
+  function takeAMasterMove(turn) {
+    return true;
+  }
+
+  this.plays = function(_game) {
+    game = _game;
+  }
+
+  this.notify = function(levelOfIntelligence) {
+    case "blind":
+      takeABlindMove(turn);
+    break;
+
+    case "novice":
+      takeANoviceMove(turn);
+    break;
+
+    case "master":
+      takeAMasterMove(turn);
+    break;
+  }
+}
+
+// AI action
+
+var AIAction = function(pos) {
+  this.movePosition = pos;
+
+  this.minimaxVal = 0;
+
+  this.applyTo = function(state) {
+    var next = new State(state);
+
+    next.board[this.movePosition] = state.turn;
+
+    if (state.turns == "O") {
+      next.oMovesCount++;
+    }
+    next.advanceTurn();
+    return next;
+  }
+}
+
+// sort actions
+
+AIAction.ASCENDING = function(firstAction, secondAction) {
+  if (firstAction.minimaxVal < secondAction.minimaxVal) {
+    return -1;
+  } else if (firstAction.minimaxVal > secondAction.minimaxVal) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+AIAction.DESCENDING = function(firstAction, secondAction) {
+  if (firstAction.minimaxVal > secondAction.minimaxVal) {
+    return 1;
+  } else if (firstAction.minimaxVal < secondAction.minimaxVal) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+// Game
+
+var Game = function(autoPlayer) {
+  this.ai = autoPlayer;
+  this.currentState = new State();
+
+  this.currentState.board = ["E", "E", "E",
+    "E", "E", "E",
+    "E", "E", "E"];
+
+  this.currentState.turn = "X";
+
+  this.status = "beginning";
 }
