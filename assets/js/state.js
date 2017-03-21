@@ -1,0 +1,1 @@
+// This function constructs and initiates all states in the game. Each state is essentially a configuration of the game grid, including whose turn it is, result of the current game state, and how many moves remain for the computer player.
