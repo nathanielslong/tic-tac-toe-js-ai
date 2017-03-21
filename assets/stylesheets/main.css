@@ -17,8 +17,8 @@
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
-  cursor:pointer;
-  float:left;
+  cursor: pointer;
+  float: left;
   line-height: 140px;
   text-align: center;
   font-family: "Arial Narrow";
@@ -31,7 +31,7 @@
   font-size: 40px;
   font-weight: bold;
   text-align: center;
-  margin-top:40px;
+  margin-top: 40px;
 }
 
 .level {
@@ -45,7 +45,7 @@
 }
 
 .not-selected:hover {
-  opacity:1;
+  opacity: 1;
 }
 
 .start {
@@ -56,28 +56,28 @@
   line-height: 100px;
   text-align: center;
   border-radius: 50px;
-  -webkit-border-radius:50px;
-  -moz-border-radius:50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
   color: white;
   margin-left: auto;
   margin-right: auto;
-  cursor:pointer;
-  opacity:0.5;
+  cursor: pointer;
+  opacity: 0.5;
 }
 
 .start:hover {
-  opacity:1;
+  opacity: 1;
 }
 
 .ingame {
-  display:none;
-  color:lightskyblue;
+  display: none;
+  color: lightskyblue;
 }
 
 .ingame > p {
-  margin:0px;
+  margin: 0px;
 }
 
 .robot {
-  opacity:0.5;
+  opacity: 0.5;
 }
