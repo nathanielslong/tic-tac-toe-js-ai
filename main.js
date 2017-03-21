@@ -258,7 +258,116 @@ var Game = function(autoPlayer) {
     "E", "E", "E",
     "E", "E", "E"];
 
-  this.currentState.turn = "X";
+    this.currentState.turn = "X";
 
-  this.status = "beginning";
+    this.status = "beginning";
+
+    this.advanceTo = function(_state) {
+      this.currentState = _state;
+      if (_state.isTerminal()) {
+        this.status = "ended";
+
+        if (_state.result == "X-won") {
+          return "X";
+        } else if (_state.result == "O-won") {
+          return "O";
+        } else {
+          return "draw";
+        }
+      } else {
+        if (this.currentState == "X") {
+          return "human";
+        } else {
+          return "AI";
+          this.ai.notify("O");
+        }
+      }
+      this.start = function() {
+        if (this.status == "beginning") {
+          this.advanceTo(this.currentState);
+          this.status = "running";
+        }
+      }
+    }
+}
+
+// score calculator
+
+Game.score = function(_state) {
+  if (_state.result !== "still running") {
+    if (_state.result == "X-won") {
+      return 10 - _state.oMovesCount;
+    } else if (_state.result == "O-won") {
+      return -10 + _state.oMovesCount;
+    } else {
+      return 0;
+    }
+  }
+}
+
+// minimax function
+
+function minimaxValue(state) {
+  if (state.isTerminal()) {
+    return Game.score(state);
+  } else {
+    var startScore;
+
+    if (state.turn == "X") {
+      stateScore = -1000;
+    } else {
+      stateScore = 1000;
+    }
+
+    var availablePositions = state.emptyCells();
+
+    var availableNextStates = availablePositions.map(function(pos) {
+      var action = new AIAction(pos);
+
+      var nextState = action.applyTo(state);
+
+      return nextState;
+    })
+    availableNextStates.forEach(function(nextState) {
+      var nextScore = minimaxValue(nextState);
+
+      if (state.turn == "X") {
+        if (nextScore > stateScore) {
+          stateScore = nextScore;
+        }
+      } else {
+        if (nextScore < stateScore) {
+          stateScore = nextScore;
+        }
+      }
+    })
+    return stateScore;
+  }
+}
+
+// make a perfect move
+
+function takeAMove(turn) {
+  var available = game.currentState.emptyCells();
+
+  var availableActions = available.map(function(pos) {
+    var action = new AIAction(pos);
+
+    action.minimaxVal = minimaxVal(next);
+
+    return action;
+  })
+
+  if (turn == "X") {
+    availableActions.sort(AIAction.DESCENDING);
+  } else {
+    availableActions.sort(AIAction.DESCENDING);
+  }
+
+  var chosenAction = availableActions[0];
+  var next = chosenAction.applyTo(game.currentState);
+
+  return "add to board"
+
+  game.advanceTo(next);
 }
