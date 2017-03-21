@@ -50,7 +50,7 @@ var State = function(old) {
     // First, check row win conditions
     for (i = 0; i <= 6; i += 3) {
       if (B[i] !== "E" && B[i] == B[i + 1] && B[i] == B[i + 2]) {
-        this.result = B[i] + "-won";
+        this.result = B[i] + " won";
         return true;
       }
     }
@@ -58,7 +58,7 @@ var State = function(old) {
     // Then, check columns
     for (i = 0; i <= 2; i++) {
       if (B[i] !== "E" && B[i] == B[i + 3] && B[i] == B[i + 6]) {
-        this.result = B[i] + "-won";
+        this.result = B[i] + " won";
         return true;
       }
     }
@@ -66,7 +66,7 @@ var State = function(old) {
     // Then diagonals
     for (i = 0; j = 4; i <= 2; i += 2; j -= 2;) {
       if (B[i] !== "E" && B[i] == B[i + j] && B[i] == B[i + 2 * j]) {
-        this.result = B[i] + "-won";
+        this.result = B[i] + " won";
         return true;
       }
     }
