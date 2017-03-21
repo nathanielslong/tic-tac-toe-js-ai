@@ -4,6 +4,7 @@
 
 // State is initialized with the old state of the game, in order to have a reference to advance the game.
 var State = function(old) {
+  // Sets whose turn it is (human or ai)
   this.turn = "";
   // O Moves Count: number of moves for the AI player
   this.oMovesCount = 0;
