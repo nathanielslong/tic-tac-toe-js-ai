@@ -47,3 +47,16 @@ var Game = function(autoPlayer) {
     }
   }
 }
+
+// This function calculates the score of the game based on the human players position, needed for minimaxing
+Game.score = function(_state) {
+  if (_state.result !== "still running") {
+    if (_state.result == "X won") {
+      return 10 - _state.oMovesCount;
+    } else if (_state.result == "O won") {
+      return -10 + _state.oMovesCount;
+    } else {
+      return 0;
+    }
+  }
+}

@@ -6,15 +6,103 @@ var AI = function(level) {
   // Stores the game being played
   var game = {};
 
-  // function that returns the minimax Value of a given game state
-  function minimaxValue(state) {...};
+  // recursive function that returns the minimax Value of a given game state
+  function minimaxValue(state) {
+    if (state.isTerminal()) {
+      return Game.score(state);
+    } else {
+      var stateScore;
+
+      if (state.turn == "X") {
+        // for X turn, we maximize score, so we initialize with a score lower than the function could reach
+        stateScore = -1000;
+      } else {
+        // for O turn, we minimize score, so we initialize with a score higher than the function could reach
+        stateScore = 1000;
+      }
+
+      var availablePositions = state.emptyCells();
+
+      // calculates available next states
+      var availableNextStates = availablePositions.map( function(pos) {
+        var action = new AIAction(pos);
+
+        var nextState = action.applyTo(state);
+
+        return nextState
+      })
+
+      // gets minimax value for all the available next states
+      availableNextStates.forEach( function(nextState) {
+        var nextScore = minimaxValue(nextState);
+
+        if (state.turn == "X") {
+          // maximize X
+          if (nextScore > stateScore) {
+            stateScore = nextScore;
+          }
+        } else {
+          // minimize O
+          if (nextScore < stateScore) {
+            stateScore = nextScore;
+          }
+        }
+      })
+      return stateScore;
+    }
+  }
 
   // move functions based on a given level of intelligence. turn is the player to play, either x or o
-  function takeABlindMove(turn) {...};
+  // ai chooses a random move
+  function takeARandomMove(turn) {
+    var available = game.currentState.emptyCells();
+  }
 
-  function takeANoviceMove(turn) {...};
+  // ai chooses the optimal move 40% of the time, suboptimal (2nd choice) 60%
+  function takeANoviceMove(turn) {
+    var available = game.currentState.emptyCells();
+    var randomCell = available[Math.floor(Math.random() * available.length)];
+    var action = new AIAction(randomCell);
 
-  function takeAMasterMove(turn) {...};
+    var next = action.applyTo(game.currentState);
+
+    human.insertAt(chosenAction.movePosition, turn);
+
+    game.advanceTo(next);
+  }
+
+  // ai chooses the optimal move
+  function takeAMasterMove(turn) {
+    var available = game.currentState.emptyCells();
+
+    // calculate score for each possible action
+    var availableActions = available.map(function(pos) {
+      var action = new AIAction(pos);
+
+      // get next state
+      var next = action.applyTo(game.currentState);
+
+      action.minimaxVal = minimaxValue(next);
+
+      return action;
+    })
+
+    if (turn == "X") {
+      // x maximizes
+      availableActions.sort(AIAction.DESCENDING);
+    } else {
+      // o minimizes
+      availableActions.sort(AIAction.ASCENDING);
+    }
+
+    var chosenAction = availableActions[0];
+    var next = chosenAction.applyTo(game.currentState);
+
+    // puts x or o at chosen position on board
+    human.insertAt(chosenAction.movePosition, turn);
+
+    game.advanceTo(next);
+  }
 
   // function that specifies the game to be played
   this.plays = function(_game) {
@@ -24,17 +112,17 @@ var AI = function(level) {
   // Method to specify the level of intelligence
   this.notify = function(turn) {
     switch(levelOfIntelligence) {
-      case "blind": 
-        takeABlindMove(turn); 
-        break;
+      case "random":
+        takeARandomMove(turn);
+      break;
 
-      case "blind": 
-        takeANoviceMove(turn); 
-        break;
+      case "novice":
+        takeANoviceMove(turn);
+      break;
 
-      case "master": 
-        takeAMasterMove(turn); 
-        break;
+      case "master":
+        takeAMasterMove(turn);
+      break;
     }
   }
 }
