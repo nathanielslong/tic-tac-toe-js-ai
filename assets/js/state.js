@@ -112,6 +112,9 @@ var Game = function(autoPlayer) {
         } else {
           human.switchViewTo("draw");
         }
+
+        $('.messages').html("Play again?");
+
       } else { // the game is still running, so we switch players
         if (this.currentState.turn == "X") {
           human.switchViewTo("human");

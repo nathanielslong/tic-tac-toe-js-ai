@@ -12,6 +12,8 @@ $('.level').each(function() {
     $this.toggleClass('selected');
 
     ai.level = $this.attr('id');
+
+    $('.start').fadeIn();
   })
 })
 
@@ -25,8 +27,9 @@ $('.start').click(function() {
     aiPlayer.plays(globals.game);
 
     globals.game.start();
-  }
-})
+
+    $('.title').fadeOut();
+}})
 
 // control for the cell clicking control
 $('.cell').each(function() {
@@ -45,4 +48,12 @@ $('.cell').each(function() {
       globals.game.advanceTo(next);
     }
   })
+})
+
+// Allow restarting of the game
+
+$('.messages').click(function() {
+  if (globals.game.status == "ended") {
+    alert("hi");
+  }
 })
