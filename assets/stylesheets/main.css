@@ -43,6 +43,7 @@
 .control, .messages, .title {
   font-family: "Aldrich", sans-serif;
   font-size: 40px;
+  cursor: pointer;
   font-weight: bold;
   text-align: center;
   margin-top: 40px;
