@@ -4,7 +4,7 @@
 
 // State is initialized with the old state of the game, in order to have a reference to advance the game.
 var State = function(old) {
-  // Sets whose turn it is (human or ai)
+  // Sets whose turn it is (ui or ai)
   this.turn = "";
   // O Moves Count: number of moves for the AI player
   this.oMovesCount = 0;
@@ -65,7 +65,7 @@ var State = function(old) {
 
     // Then diagonals
     for (i = 0, j = 4; i <= 2; i += 2, j -= 2) {
-      if (B[i] !== "E" && B[i] == B[i + j] && B[i] == B[i + 2 * j]) {
+      if (B[i] !== "E" && B[i] == B[i + j] && B[i] == B[i + (2 * j)]) {
         this.result = B[i] + " won";
         return true;
       }
@@ -90,57 +90,55 @@ var Game = function(autoPlayer) {
   // Initializes to an empty board configuration
   this.currentState = new State();
 
-  this.currentState.board = ["E","E","E",
-                             "E","E","E",
-                             "E","E","E"];
+  this.currentState.board = ["E", "E", "E",
+    "E", "E", "E",
+    "E", "E", "E"];
 
-  this.currentState.turn = "X";
+    this.currentState.turn = "X";
 
-  this.status = "beginning";
+    this.status = "beginning";
 
-  // This next function advances the game ahead one state
-  this.advanceTo = function(_state) {
-    this.currentState = _state;
-    // we check if the state is terminal
-    if (_state.isTerminal()) {
-      this.status = "ended";
+    // This next function advances the game ahead one state
+    this.advanceTo = function(_state) {
+      this.currentState = _state;
+      // we check if the state is terminal
+      if (_state.isTerminal()) {
+        this.status = "ended";
 
-      if (_state.result == "X won") {
-        human.switchViewTo("won")
-      } else if (_state.result == "O won") {
-        human.switchViewTo("lost");
-      } else {
-        human.switchViewTo("draw");
-      }
-    } else { // the game is still running, so we switch players
-      if (this.currentState.turn == "X") {
-        human.switchViewTo("human");
-      } else {
-        human.switchViewTo("robot");
+        if (_state.result == "X won") {
+          ui.switchViewTo("won")
+        } else if (_state.result == "O won") {
+          ui.switchViewTo("lost");
+        } else {
+          ui.switchViewTo("draw");
+        }
+      } else { // the game is still running, so we switch players
+        if (this.currentState.turn == "X") {
+          ui.switchViewTo("human");
+        } else {
+          ui.switchViewTo("robot");
 
-        this.ai.notify("O");
+          this.ai.notify("O");
+        }
       }
     }
-  }
 
-  // This function starts the game
-  this.start = function() {
-    if (this.status == "beginning") {
-      this.advanceTo(this.currentState);
-      this.status = "running";
+    // This function starts the game
+    this.start = function() {
+      if (this.status == "beginning") {
+        this.advanceTo(this.currentState);
+        this.status = "running";
+      }
     }
-  }
 }
 
-// This function calculates the score of the game based on the human players position, needed for minimaxing
+// This function calculates the score of the game based on the ui players position, needed for minimaxing
 Game.score = function(_state) {
-  if (_state.result !== "still running") {
-    if (_state.result == "X won") {
-      return 10 - _state.oMovesCount;
-    } else if (_state.result == "O won") {
-      return -10 + _state.oMovesCount;
-    } else {
-      return 0;
-    }
+  if (_state.result == "X won") {
+    return 10 - _state.oMovesCount;
+  } else if (_state.result == "O won") {
+    return -10 + _state.oMovesCount;
+  } else {
+    return 0;
   }
 }
