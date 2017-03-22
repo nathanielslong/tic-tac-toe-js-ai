@@ -2,6 +2,11 @@
 
 // Game is represented as an array of length 9 containing each square.
 
+// Establish scores as zero to start
+var humanScore = 0;
+var robotScore = 0;
+var drawScore = 0;
+
 // State is initialized with the old state of the game, in order to have a reference to advance the game.
 var State = function(old) {
   // Sets whose turn it is (human or ai)
@@ -107,12 +112,18 @@ var Game = function(autoPlayer) {
 
         if (_state.result == "X won") {
           human.switchViewTo("won")
+          humanScore++;
         } else if (_state.result == "O won") {
           human.switchViewTo("lost");
+          robotScore++;
         } else {
           human.switchViewTo("draw");
+          drawScore++;
         }
 
+        $('.human-score').html(humanScore);
+        $('.robot-score').html(robotScore);
+        $('.draw-score').html(drawScore);
         $('.messages').html("Play again?").fadeIn();
 
       } else { // the game is still running, so we switch players
