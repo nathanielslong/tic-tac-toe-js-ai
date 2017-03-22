@@ -4,7 +4,7 @@
 
 // State is initialized with the old state of the game, in order to have a reference to advance the game.
 var State = function(old) {
-  // Sets whose turn it is (ui or ai)
+  // Sets whose turn it is (human or ai)
   this.turn = "";
   // O Moves Count: number of moves for the AI player
   this.oMovesCount = 0;
@@ -106,17 +106,17 @@ var Game = function(autoPlayer) {
         this.status = "ended";
 
         if (_state.result == "X won") {
-          ui.switchViewTo("won")
+          human.switchViewTo("won")
         } else if (_state.result == "O won") {
-          ui.switchViewTo("lost");
+          human.switchViewTo("lost");
         } else {
-          ui.switchViewTo("draw");
+          human.switchViewTo("draw");
         }
       } else { // the game is still running, so we switch players
         if (this.currentState.turn == "X") {
-          ui.switchViewTo("human");
+          human.switchViewTo("human");
         } else {
-          ui.switchViewTo("robot");
+          human.switchViewTo("robot");
 
           this.ai.notify("O");
         }
@@ -132,7 +132,7 @@ var Game = function(autoPlayer) {
     }
 }
 
-// This function calculates the score of the game based on the ui players position, needed for minimaxing
+// This function calculates the score of the game based on the human players position, needed for minimaxing
 Game.score = function(_state) {
   if (_state.result == "X won") {
     return 10 - _state.oMovesCount;

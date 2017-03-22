@@ -61,7 +61,7 @@ var AI = function(level) {
 
     var next = action.applyTo(game.currentState);
 
-    ui.insertAt(randomCell, turn);
+    human.insertAt(randomCell, turn);
 
     game.advanceTo(next);
   }
@@ -103,7 +103,7 @@ var AI = function(level) {
     var next = chosenAction.applyTo(game.currentState);
 
     // puts x or o at chosen position on board
-    ui.insertAt(chosenAction.movePosition, turn);
+    human.insertAt(chosenAction.movePosition, turn);
 
     game.advanceTo(next);
   }
@@ -136,7 +136,7 @@ var AI = function(level) {
     var next = chosenAction.applyTo(game.currentState);
 
     // puts x or o at chosen position on board
-    ui.insertAt(chosenAction.movePosition, turn);
+    human.insertAt(chosenAction.movePosition, turn);
 
     game.advanceTo(next);
   }

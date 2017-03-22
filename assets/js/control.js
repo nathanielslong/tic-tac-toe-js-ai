@@ -38,7 +38,7 @@ $('.cell').each(function() {
       var next = new State(globals.game.currentState);
       next.board[index] = "X";
 
-      ui.insertAt(index, "X");
+      human.insertAt(index, "X");
 
       next.advanceTurn();
 
