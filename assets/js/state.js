@@ -113,7 +113,7 @@ var Game = function(autoPlayer) {
           human.switchViewTo("draw");
         }
 
-        $('.messages').html("Play again?");
+        $('.messages').html("Play again?").fadeIn();
 
       } else { // the game is still running, so we switch players
         if (this.currentState.turn == "X") {

@@ -54,6 +54,26 @@ $('.cell').each(function() {
 
 $('.messages').click(function() {
   if (globals.game.status == "ended") {
-    alert("hi");
+    var board = $('.cell');
+
+    for (i = 0; i < board.length; i++) {
+      $(board[i]).removeClass('occupied');
+      $(board[i]).addClass('undefined');
+      $(board[i]).html('');
+    }
+
+    var difficulties = $('.level');
+
+    for (i = 0; i < difficulties.length; i++) {
+      $(difficulties[i]).removeClass('selected');
+      $(difficulties[i]).addClass('not-selected');
+    }
+
+    $('.title').fadeIn();
+    $('.initial').fadeIn();
+    $('.ingame').fadeOut();
+    $('.messages').fadeOut();
+    $('.start').hide();
+    human.initialControlsVisible = true;
   }
 })
