@@ -29,7 +29,7 @@ var AI = function(level) {
 
         var nextState = action.applyTo(state);
 
-        return nextState
+        return nextState;
       })
 
       // gets minimax value for all the available next states
@@ -56,23 +56,60 @@ var AI = function(level) {
   // ai chooses a random move
   function takeARandomMove(turn) {
     var available = game.currentState.emptyCells();
-  }
-
-  // ai chooses the optimal move 40% of the time, suboptimal (2nd choice) 60%
-  function takeANoviceMove(turn) {
-    var available = game.currentState.emptyCells();
     var randomCell = available[Math.floor(Math.random() * available.length)];
     var action = new AIAction(randomCell);
 
     var next = action.applyTo(game.currentState);
 
+    human.insertAt(randomCell, turn);
+
+    game.advanceTo(next);
+  }
+
+  // ai chooses the optimal move 40% of the time, suboptimal (2nd choice) 60%
+  function takeANoviceMove(turn) {
+    var available = game.currentState.emptyCells();
+
+    // calculate score for each possible action
+    var availableActions = available.map(function(pos) {
+      var action = new AIAction(pos);
+
+      // get next state
+      var next = action.applyTo(game.currentState);
+
+      action.minimaxVal = minimaxValue(next);
+
+      return action;
+    })
+
+    if (turn == "X") {
+      // x maximizes
+      availableActions.sort(AIAction.DESCENDING);
+    } else {
+      // o minimizes
+      availableActions.sort(AIAction.ASCENDING);
+    }
+
+    var chosenAction;
+    if (Math.random() * 100 <= 40) {
+      chosenAction = availableActions[0];
+    } else {
+      if (availableActions.length >= 2) {
+        chosenAction = availableActions[1];
+      } else {
+        chosenAction = availableActions[0];
+      }
+    }
+    var next = chosenAction.applyTo(game.currentState);
+
+    // puts x or o at chosen position on board
     human.insertAt(chosenAction.movePosition, turn);
 
     game.advanceTo(next);
   }
 
   // ai chooses the optimal move
-  function takeAMasterMove(turn) {
+  function takeAOptimalMove(turn) {
     var available = game.currentState.emptyCells();
 
     // calculate score for each possible action
@@ -120,8 +157,8 @@ var AI = function(level) {
         takeANoviceMove(turn);
       break;
 
-      case "master":
-        takeAMasterMove(turn);
+      case "optimal":
+        takeAOptimalMove(turn);
       break;
     }
   }
